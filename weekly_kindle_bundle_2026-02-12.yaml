@@ -1,0 +1,97 @@
+generated_at: '2026-02-12T13:35:59+00:00'
+window:
+  days: 7
+  start_utc: '2026-02-05T13:35:49+00:00'
+  end_utc: '2026-02-12T13:35:49+00:00'
+attachments:
+- type: application/epub+zip
+  path: /Users/camill/projects/2026/tweet-digest/weekly-long-form-readings-2026-02-12.epub
+  exists: true
+  description: Weekly Kindle bundle EPUB built from Kindle-classified links
+epub_source_urls:
+- https://karpathy.ai/microgpt.html
+- https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95
+- https://www.anthropic.com/engineering/building-c-compiler
+pdf_attachment_urls: []
+tweet_count: 6
+tweets:
+- tweet_id: '2021756066678419508'
+  author: karpathy
+  tweet_url: https://x.com/karpathy/status/2021756066678419508
+  created_at: Thu Feb 12 01:19:43 +0000 2026
+  text: (oops should have added to this thread instead of separate post). Made a few
+    changes and put it up here as a mirror to the gist because I wanted it to one
+    page. https://t.co/piVWid3nsb https://t.co/7zZ9WeERsq
+  links:
+  - url: https://karpathy.ai/microgpt.html
+    classification: kindle
+    included_in_epub: true
+    pdf_attachment_url: null
+- tweet_id: '2021694437152157847'
+  author: karpathy
+  tweet_url: https://x.com/karpathy/status/2021694437152157847
+  created_at: Wed Feb 11 21:14:49 +0000 2026
+  text: New art project. Train and inference GPT in 243 lines of pure, dependency-free
+    Python. This is the *full* algorithmic content of what is needed. Everything else
+    is just for efficiency. I cannot simplify this any further. https://t.co/HmiRrQugnP
+  links:
+  - url: https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95
+    classification: kindle
+    included_in_epub: true
+    pdf_attachment_url: null
+- tweet_id: '2021052227289481342'
+  author: YesThisIsLion
+  tweet_url: https://x.com/YesThisIsLion/status/2021052227289481342
+  created_at: Tue Feb 10 02:42:54 +0000 2026
+  text: "RT @SakanaAILabs: \uFF13\u6708\u306B\u958B\u50AC\u3055\u308C\u308B\u300C\
+    ITC Japan\u300D\u306B\u3001Sakana AI \u5171\u540C\u5275\u696D\u8005\u306E Llion\
+    \ Jones\uFF08@YesThisIsLion\uFF09\u304C\u767B\u58C7\u3057\u307E\u3059\uFF01 \u4FDD\
+    \u967A\u696D\u754C\u306E\u307F\u306A\u3055\u307E\u3068\u3001\u9032\u5316\u3092\
+    \u7D9A\u3051\u308BAI\u30C6\u30AF\u30CE\u30ED\u30B8\u30FC\u306B\u3064\u3044\u3066\
+    \u304A\u8A71\u3057\u3059\u308B\u4E88\u5B9A\u3067\u3059\u3002 \u8A73\u7D30\u306F\
+    \u3053\u3061\u3089\uFF1Ah\u2026"
+  links:
+  - url: https://asia.insuretechconnect.com/japan
+    classification: summary
+    included_in_epub: false
+    pdf_attachment_url: null
+- tweet_id: '2019922300414620072'
+  author: OwainEvans_UK
+  tweet_url: https://x.com/OwainEvans_UK/status/2019922300414620072
+  created_at: Fri Feb 06 23:52:59 +0000 2026
+  text: "RT @ajeya_cotra: Great writeup by Carlini. I\u2019m confused how to interpret\
+    \ though - seems like he wrote a pretty elaborate testing harness, a\u2026"
+  links:
+  - url: https://www.anthropic.com/engineering/building-c-compiler
+    classification: kindle
+    included_in_epub: true
+    pdf_attachment_url: null
+- tweet_id: '2019920984242024710'
+  author: OwainEvans_UK
+  tweet_url: https://x.com/OwainEvans_UK/status/2019920984242024710
+  created_at: Fri Feb 06 23:47:45 +0000 2026
+  text: Anthropic used our recent Activation Oracle technique to help evaluate and
+    explore their latest model. https://t.co/XqhzCf80Mb
+  links:
+  - url: https://x.com/OwainEvans_UK/status/2001715774105522195
+    classification: summary
+    included_in_epub: false
+    pdf_attachment_url: null
+- tweet_id: '2019724537735352518'
+  author: YesThisIsLion
+  tweet_url: https://x.com/YesThisIsLion/status/2019724537735352518
+  created_at: Fri Feb 06 10:47:09 +0000 2026
+  text: "RT @SakanaAILabs: \u3010Sakana AI \u30D9\u30FC\u30BF\u30C6\u30B9\u30BF\u30FC\
+    \u52DF\u96C6 \U0001F41F\U0001F420\u3011 \u73FE\u5728\u958B\u767A\u4E2D\u306EAI\u30B5\
+    \u30FC\u30D3\u30B9\u306B\u3064\u3044\u3066\u3001\u691C\u8A3C\u306B\u3054\u5354\
+    \u529B\u3044\u305F\u3060\u3051\u308B\u30C6\u30B9\u30BF\u30FC\u3092\u52DF\u96C6\
+    \u3057\u3066\u3044\u307E\u3059\u3002 \u307E\u3060\u958B\u767A\u9014\u4E0A\u306E\
+    \u30D7\u30ED\u30C8\u30BF\u30A4\u30D7\u3067\u306F\u3042\u308A\u307E\u3059\u304C\
+    \u3001\u7686\u69D8\u304B\u3089\u306E\u30D5\u30A3\u30FC\u30C9\u30D0\u30C3\u30AF\
+    \u3092\u5143\u306B\u54C1\u8CEA\u3092\u5411\u4E0A\u3055\u305B\u3066\u3044\u304D\
+    \u305F\u3044\u3068\u8003\u3048\u3066\u2026"
+  links:
+  - url: https://forms.gle/R6KqqSTvUpXGEyHw5
+    classification: summary
+    included_in_epub: false
+    pdf_attachment_url: null
