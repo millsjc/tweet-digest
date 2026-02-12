@@ -3,6 +3,7 @@ import json
 import hashlib
 import mimetypes
 import os
+import sqlite3
 import subprocess
 from datetime import datetime
 from email.message import EmailMessage
@@ -15,6 +16,7 @@ LIST_ID = os.environ.get("TWEET_DIGEST_LIST_ID", "1889690040562815368")
 SENDER_EMAIL = os.environ.get("TWEET_DIGEST_SENDER_EMAIL", "mills2k4@hotmail.com")
 KINDLE_EMAIL = os.environ.get("TWEET_DIGEST_KINDLE_EMAIL", "mills2k4_9aUC84@kindle.com")
 SUMMARY_EMAIL = os.environ.get("TWEET_DIGEST_SUMMARY_EMAIL", SENDER_EMAIL)
+ZOTERO_DIR = Path(os.environ.get("TWEET_DIGEST_ZOTERO_DIR", "/Users/camill/Zotero"))
 
 SHORT_DOMAINS = {
     "x.com",
@@ -322,6 +324,58 @@ def seed_processed_items_from_links(links_json: Path) -> list[str]:
     return seeded
 
 
+def fetch_recent_zotero_pdfs(hours: int = 24) -> list[dict]:
+    zotero_db = ZOTERO_DIR / "zotero.sqlite"
+    zotero_storage = ZOTERO_DIR / "storage"
+    if not zotero_db.exists() or not zotero_storage.exists():
+        return []
+
+    query = """
+        SELECT i.key AS attachment_key, i.dateAdded AS added_utc, ia.path
+        FROM itemAttachments ia
+        JOIN items i ON i.itemID = ia.itemID
+        WHERE ia.contentType = 'application/pdf'
+          AND ia.path LIKE 'storage:%'
+          AND i.dateAdded >= datetime('now', ?)
+        ORDER BY i.dateAdded DESC
+    """
+    uri = f"file:{zotero_db}?mode=ro&immutable=1"
+    try:
+        conn = sqlite3.connect(uri, uri=True)
+    except sqlite3.Error:
+        return []
+
+    try:
+        rows = conn.execute(query, (f"-{hours} hours",)).fetchall()
+    except sqlite3.Error:
+        conn.close()
+        return []
+    conn.close()
+
+    results: list[dict] = []
+    seen: set[str] = set()
+    for attachment_key, added_utc, path_value in rows:
+        if not isinstance(path_value, str) or not path_value.startswith("storage:"):
+            continue
+        relative_part = path_value.removeprefix("storage:").replace("\\", "/").lstrip("/")
+        candidate_path = zotero_storage / str(attachment_key) / relative_part
+        if not candidate_path.exists():
+            continue
+        candidate_str = str(candidate_path.resolve())
+        if candidate_str in seen:
+            continue
+        seen.add(candidate_str)
+        results.append(
+            {
+                "attachment_key": str(attachment_key),
+                "added_utc": str(added_utc),
+                "path": candidate_str,
+                "filename": candidate_path.name,
+            }
+        )
+    return results
+
+
 def main() -> int:
     script_dir = Path(__file__).resolve().parent
     root_dir = script_dir.parent
@@ -428,6 +482,8 @@ def main() -> int:
         except subprocess.CalledProcessError:
             pass
 
+    zotero_recent_pdfs = fetch_recent_zotero_pdfs(hours=24)
+
     date_tag = datetime.now().strftime("%Y-%m-%d")
     today = datetime.now().strftime("%b %d, %Y")
     epub_path = script_dir / f"long-form-readings-{date_tag}.epub"
@@ -477,6 +533,14 @@ def main() -> int:
             summary_lines.append(f"Tweet URL: {tweet['tweet_url']}")
         summary_lines.append("")
 
+    summary_lines.append("Zotero PDFs added in last 24 hours:")
+    if zotero_recent_pdfs:
+        for pdf in zotero_recent_pdfs:
+            summary_lines.append(f"- {pdf['filename']} ({pdf['added_utc']})")
+    else:
+        summary_lines.append("- none")
+    summary_lines.append("")
+
     summary_draft = draft_dir / f"daily_summary_{date_tag}.txt"
     summary_body = "\n".join(summary_lines).rstrip() + "\n"
     summary_draft.write_text(summary_body, encoding="utf-8")
@@ -488,11 +552,14 @@ def main() -> int:
         "",
         "Attachments:",
     ]
+    kindle_attachment_paths: list[Path] = []
     if epub_path.exists():
-        kindle_lines.append(f"- {epub_path}")
-    for pdf in downloaded_pdfs:
-        kindle_lines.append(f"- {pdf}")
-    if len(kindle_lines) == 4:
+        kindle_attachment_paths.append(epub_path)
+    kindle_attachment_paths.extend(downloaded_pdfs)
+    kindle_attachment_paths.extend(Path(pdf["path"]) for pdf in zotero_recent_pdfs)
+    for path in kindle_attachment_paths:
+        kindle_lines.append(f"- {path}")
+    if not kindle_attachment_paths:
         kindle_lines.append("- (no attachments created)")
     kindle_lines.extend(
         [
@@ -519,9 +586,7 @@ def main() -> int:
 
     kindle_eml = draft_dir / f"kindle_{date_tag}.eml"
     kindle_attachments: list[Path] = []
-    if epub_path.exists():
-        kindle_attachments.append(epub_path)
-    kindle_attachments.extend(downloaded_pdfs)
+    kindle_attachments.extend(kindle_attachment_paths)
     write_eml(
         kindle_eml,
         subject=f"AI Digest - {date_tag}",
