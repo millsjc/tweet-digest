@@ -1,0 +1,5 @@
+*.pyc
+*.json
+__pycache__/run_digest.cpython-311.pyc
+daily_raw.json
+digest_state.json
